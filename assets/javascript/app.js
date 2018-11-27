@@ -11,18 +11,29 @@ var config = {
 
  var database = firebase.database(); 
 
+ database.ref().on("child_added", function(childSnapshot) {
+
+    var dataName = childSnapshot.val().name;
+    var dataDestination = childSnapshot.val().destination;
+    var dataTime = childSnapshot.val().time;
+    var dataFrequency = childSnapshot.val().frequency;
+
+    
+
+    
+    
+    var newRow = $("<tr>").append(
+        $("<td>").text(dataName),
+        $("<td>").text(dataDestination),
+        $("<td>").text(dataFrequency),
+        $("<td>").text("soon"),
+        $("<td>").text("soon")
+        );
 
 
 
-
-
-
-
-
-
-
-
-
+    $("#train-schedule").append(newRow);
+});
 
 
 
