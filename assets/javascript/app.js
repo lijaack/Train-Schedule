@@ -15,22 +15,29 @@ var config = {
 
     var dataName = childSnapshot.val().name;
     var dataDestination = childSnapshot.val().destination;
-    var dataTime = childSnapshot.val().time;
+    var dataTime = (childSnapshot.val().time);
     var dataFrequency = childSnapshot.val().frequency;
+    var nowTime = moment().format('HH:mm');    
+    var timeDiff = moment.duration(nowTime).asMinutes() - moment.duration(dataTime).asMinutes();
+    var remainder = timeDiff % dataFrequency;
+    var timeRemain = dataFrequency - remainder;
+        if (timeRemain > dataFrequency){
+            timeRemain = timeRemain - dataFrequency;
+        }
+    var nextTrain = moment().add(timeRemain, 'minutes').format('HH:mm');
 
-    
+    console.log(moment.duration(nowTime).asMinutes())
+    console.log(Math.abs(moment.duration(dataTime).asMinutes()))
+    console.log(remainder)
+    console.log(timeRemain)
 
-    
-    
     var newRow = $("<tr>").append(
         $("<td>").text(dataName),
         $("<td>").text(dataDestination),
         $("<td>").text(dataFrequency),
-        $("<td>").text("soon"),
-        $("<td>").text("soon")
+        $("<td>").text(nextTrain),
+        $("<td>").text(timeRemain)
         );
-
-
 
     $("#train-schedule").append(newRow);
 });
@@ -39,23 +46,47 @@ var config = {
 
 $("#submit").on("click", function(){
     event.preventDefault();
+    
     var trainName = $("#train-name").val().trim();
     var trainDestination = $("#train-destination").val().trim();
     var trainTime = $("#train-time").val().trim();
     var trainFrequency = $("#train-frequency").val().trim();
+    var checkTime = moment(trainTime, 'HH:mm', true).isValid();
+    var checkTime2 = moment(trainTime, 'H:mm', true).isValid();
 
-    database.ref().push({
-        name: trainName,
-        destination: trainDestination,
-        time: trainTime,
-        frequency: trainFrequency
-    })
+    console.log(checkTime2)
 
-    $("#train-name").val("");
-    $("#train-destination").val("");
-    $("#train-time").val("");
-    $("#train-frequency").val("");
+    if(trainName.length > 0 && trainDestination.length > 0 && trainTime.length > 0 && trainFrequency > 0){
+        
+        $("#error").empty();
+
+        if (checkTime === true || checkTime2 === true){
+            $("#error").empty();
+            database.ref().push({
+                name: trainName,
+                destination: trainDestination,
+                time: trainTime,
+                frequency: trainFrequency
+            })
+
+            $("#train-name").val("");
+            $("#train-destination").val("");
+            $("#train-time").val("");
+            $("#train-frequency").val("");
+
+        }   else { 
+            $("#error").append($("<h5 style='color: red'>").text("Check time formatting!"));
+        }
 
 
+
+
+
+    } else if ($("#error").children().length === 0){
+        
+        $("#error").append($("<h5 style='color: red'>").text("Make sure all inputs are filled in!"));
+    }
+   
+    
 
 })
