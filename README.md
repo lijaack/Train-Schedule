@@ -1,7 +1,7 @@
 # Train-Schedule
 A Train Scheduler to track the arrival time of trains!   
 You can check when your train arrives here -->https://lijaack.github.io/Train-Schedule/   
-![picture](assets/images/train.jpg)
+![picture](assets/images/train.png)
 
 
 
