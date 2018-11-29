@@ -1,0 +1,16 @@
+.green-border{
+    border: 1px solid green;
+    border-radius: 25px;
+    padding:10px;
+}
+
+main {
+    padding: 20px 0;
+    background: linear-gradient(to bottom, #182b7c 0%,#2f88fc 100%);
+}
+
+
+
+div {
+    background-color:white;
+}
